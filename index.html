@@ -1,2 +1,579 @@
 # COM.APPLE.IOS.SUOPORT
-index.html
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HP Meler - Free Fire Alok Edition</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-cyan: #00f2fe;
+      --accent-neon: #ff0055;
+      --bg-dark: #050811;
+      --card-bg: rgba(12, 18, 34, 0.85);
+      --border-glow: rgba(0, 242, 254, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden; /* Cố định màn hình */
+      background: var(--bg-dark);
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Container chính */
+    .app-viewport {
+      width: 100%;
+      max-width: 440px;
+      height: 100%;
+      max-height: 920px;
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      gap: 14px;
+      position: relative;
+      background: 
+        linear-gradient(to bottom, rgba(5, 8, 17, 0.75), rgba(5, 8, 17, 0.95)),
+        url('https://wallpapers.com/images/featured/free-fire-alok-0w9z3m91o3z9u88b.jpg') center/cover no-repeat;
+    }
+
+    /* Toast thông báo */
+    .toast-container {
+      position: absolute;
+      top: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      width: 90%;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: rgba(10, 16, 30, 0.95);
+      border: 2px solid var(--primary-cyan);
+      color: #ffffff;
+      padding: 12px 18px;
+      border-radius: 30px;
+      font-size: 15px;
+      font-weight: 700;
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.6);
+      animation: fadeInOut 2.8s forwards;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-20px); }
+      15% { opacity: 1; transform: translateY(0); }
+      85% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-20px); }
+    }
+
+    /* Header Banner Alok & HP Meler */
+    .header-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    }
+
+    .alok-avatar {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      border: 2.5px solid var(--primary-cyan);
+      box-shadow: 0 0 15px var(--primary-cyan);
+      object-fit: cover;
+    }
+
+    .header-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-title {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ffffff, #00f2fe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+
+    .sub-title {
+      font-size: 13px;
+      color: #ff0055;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    /* Box Nhập Thông Tin Thiết Bị (3 Dòng) */
+    .device-info-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .info-label {
+      color: #94a3b8;
+    }
+
+    .info-val {
+      color: var(--primary-cyan);
+      font-weight: 800;
+    }
+
+    .device-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid var(--primary-cyan);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      outline: none;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+    }
+
+    .device-input::placeholder {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Khung Cuộn Chứa 2 Mục Feature */
+    .content-scrollable {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow-y: auto;
+      padding-right: 2px;
+      opacity: 0.3;
+      pointer-events: none;
+      transition: all 0.4s ease;
+    }
+
+    .content-scrollable.unlocked {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .content-scrollable::-webkit-scrollbar {
+      width: 0px;
+    }
+
+    /* Card mục tính năng */
+    .section-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .section-card.active {
+      border-color: var(--primary-cyan);
+    }
+
+    .section-header {
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .section-title-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      background: #000;
+      border: 2px solid var(--primary-cyan);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary-cyan);
+      font-size: 18px;
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+    }
+
+    .arrow-icon {
+      color: var(--primary-cyan);
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .section-card.active .arrow-icon {
+      transform: rotate(180deg);
+    }
+
+    .section-body {
+      display: none;
+      padding: 8px 18px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .section-card.active .section-body {
+      display: block;
+    }
+
+    /* Control Items & iOS Switch */
+    .control-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .control-item:last-child {
+      border-bottom: none;
+    }
+
+    .control-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 58px;
+      height: 32px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #1e293b;
+      transition: .3s;
+      border-radius: 32px;
+      border: 1.5px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 24px;
+      width: 24px;
+      left: 3px;
+      bottom: 2.5px;
+      background-color: #ffffff;
+      transition: .3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    input:checked + .slider {
+      background: linear-gradient(135deg, var(--primary-cyan), #4facfe);
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.5);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(25px);
+    }
+
+    /* RAM & Giảm giật lag Spinner */
+    .ram-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0 6px;
+    }
+
+    .circle-progress {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary-cyan) 0deg, #1e293b 0deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      box-shadow: 0 0 18px rgba(0, 242, 254, 0.3);
+    }
+
+    .circle-inner {
+      width: 96px;
+      height: 96px;
+      background-color: #0c1222;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--primary-cyan);
+    }
+
+    .btn-ram {
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary-cyan), #4facfe);
+      border: none;
+      color: #020617;
+      font-weight: 900;
+      padding: 13px 0;
+      border-radius: 14px;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-ram:active {
+      transform: scale(0.97);
+    }
+
+    .footer-text {
+      font-size: 12px;
+      color: #64748b;
+      text-align: center;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+    
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Header HP Meler + Alok Free Fire -->
+    <div class="header-card">
+      <img src="https://wallpapers.com/images/featured/free-fire-alok-0w9z3m91o3z9u88b.jpg" alt="Alok Free Fire" class="alok-avatar">
+      <div class="header-info">
+        <div class="app-title">HP MELER VIP</div>
+        <div class="sub-title"><i class="fa-solid fa-fire"></i> FREE FIRE ALOK EDITION</div>
+      </div>
+    </div>
+
+    <!-- Khung 3 Thông Tin Hệ Thống -->
+    <div class="device-info-card">
+      <div class="info-row">
+        <span class="info-label">iOS hỗ trợ:</span>
+        <span class="info-val">iOS 12.0 - 18.0+</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">iOS của bạn:</span>
+        <span class="info-val" id="userIosVer">Detecting...</span>
+      </div>
+      <div style="margin-top: 4px;">
+        <input type="text" id="deviceInput" class="device-input" placeholder="Nhập thiết bị của bạn (Ví dụ: iPhone 13 Pro Max)..." oninput="checkDeviceInput()">
+      </div>
+    </div>
+
+    <!-- Danh sách các Mục Tính Năng (Hiện khi đã điền thiết bị) -->
+    <div class="content-scrollable" id="contentBox">
+
+      <!-- MỤC 1: HỖ TRỢ KÉO TÂM -->
+      <div class="section-card active" id="sec1">
+        <div class="section-header" onclick="toggleSection('sec1')">
+          <div class="section-title-box">
+            <div class="section-icon"><i class="fa-solid fa-crosshairs"></i></div>
+            <span class="section-title">HỖ TRỢ KÉO TÂM</span>
+          </div>
+          <i class="fa-solid fa-chevron-down arrow-icon"></i>
+        </div>
+
+        <div class="section-body">
+          <div class="control-item">
+            <span class="control-label">Tăng nhạy</span>
+            <label class="switch">
+              <input type="checkbox" onchange="handleToggle('Tăng nhạy', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="control-item">
+            <span class="control-label">Nhẹ tâm</span>
+            <label class="switch">
+              <input type="checkbox" onchange="handleToggle('Nhẹ tâm', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="control-item">
+            <span class="control-label">Bám đầu</span>
+            <label class="switch">
+              <input type="checkbox" onchange="handleToggle('Bám đầu', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="control-item">
+            <span class="control-label">Tăng FPS</span>
+            <label class="switch">
+              <input type="checkbox" onchange="handleToggle('Tăng FPS', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <div class="control-item">
+            <span class="control-label">Tăng 120 FPS</span>
+            <label class="switch">
+              <input type="checkbox" onchange="handleToggle('Tăng 120 FPS', this.checked)">
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- MỤC 2: TỐI ƯU THIẾT BỊ -->
+      <div class="section-card" id="sec2">
+        <div class="section-header" onclick="toggleSection('sec2')">
+          <div class="section-title-box">
+            <div class="section-icon"><i class="fa-solid fa-rocket"></i></div>
+            <span class="section-title">TỐI ƯU THIẾT BỊ</span>
+          </div>
+          <i class="fa-solid fa-chevron-down arrow-icon"></i>
+        </div>
+
+        <div class="section-body">
+          <div class="ram-container">
+            <div class="circle-progress" id="circleProgress">
+              <div class="circle-inner" id="ramPercent">0%</div>
+            </div>
+            <button class="btn-ram" onclick="startClean()"><i class="fa-solid fa-broom"></i> GIẢM GIẬT LAG / DỌN DẸP</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-text">
+      HP Meler Assistant © Powered by Free Fire Alok
+    </div>
+
+  </div>
+
+  <script>
+    // Nhận diện phiên bản iOS giả định
+    document.getElementById('userIosVer').innerText = 'iOS ' + (15 + Math.floor(Math.random() * 3)) + '.' + Math.floor(Math.random() * 5);
+
+    // Mở khóa danh sách mục khi điền tên thiết bị
+    function checkDeviceInput() {
+      const val = document.getElementById('deviceInput').value.trim();
+      const contentBox = document.getElementById('contentBox');
+      
+      if (val.length >= 2) {
+        contentBox.classList.add('unlocked');
+      } else {
+        contentBox.classList.remove('unlocked');
+      }
+    }
+
+    // Đóng mở mục accordion
+    function toggleSection(id) {
+      document.getElementById(id).classList.toggle('active');
+    }
+
+    // Toast Thông báo
+    function showToast(msg) {
+      const container = document.getElementById('toastContainer');
+      container.innerHTML = '';
+      
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #00f2fe;"></i> ${msg}`;
+      
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 2800);
+    }
+
+    // Xử lý Toggle Switch
+    function handleToggle(name, isChecked) {
+      showToast(isChecked ? `Đã bật tính năng ${name}` : `Đã tắt tính năng ${name}`);
+    }
+
+    // Xử lý Xoay Vòng Tròn Dọn Dẹp / Giảm Giật Lag
+    let isCleaning = false;
+    function startClean() {
+      if (isCleaning) return;
+      isCleaning = true;
+
+      let percent = 0;
+      const circle = document.getElementById('circleProgress');
+      const percentText = document.getElementById('ramPercent');
+
+      const interval = setInterval(() => {
+        percent += 2;
+        const deg = (percent / 100) * 360;
+        circle.style.background = `conic-gradient(#00f2fe ${deg}deg, #1e293b ${deg}deg)`;
+        percentText.innerText = `${percent}%`;
+
+        if (percent >= 100) {
+          clearInterval(interval);
+          showToast('Đã dọn dẹp thành công!');
+          setTimeout(() => {
+            circle.style.background = `conic-gradient(#00f2fe 0deg, #1e293b 0deg)`;
+            percentText.innerText = `0%`;
+            isCleaning = false;
+          }, 1200);
+        }
+      }, 35);
+    }
+  </script>
+</body>
+</html>
